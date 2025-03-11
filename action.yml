@@ -147,16 +147,16 @@ inputs:
   openai_base_url:
     required: false
     description: 'The url of the openai api interface.'
-    default: 'https://api.openai.com/v1'
+    default: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
   openai_light_model:
     required: false
     description:
       'Model to use for simple tasks like summarizing diff on a file.'
-    default: 'gpt-3.5-turbo'
+    default: 'qwq-32b-preview'
   openai_heavy_model:
     required: false
     description: 'Model to use for complex tasks such as code reviews.'
-    default: 'gpt-4'
+    default: 'qwq-32b-preview'
   openai_model_temperature:
     required: false
     description: 'Temperature for GPT model'
@@ -233,7 +233,7 @@ inputs:
   language:
     required: false
     description: ISO code for the response language
-    default: en-US
+    default: zh-CN
   bot_icon:
     required: false
     description: 'The icon for the bot'
