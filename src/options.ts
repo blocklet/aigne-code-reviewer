@@ -32,15 +32,15 @@ export class Options {
     reviewCommentLGTM = false,
     pathFilters: string[] | null = null,
     systemMessage = '',
-    openaiLightModel = 'gpt-3.5-turbo',
-    openaiHeavyModel = 'gpt-3.5-turbo',
+    openaiLightModel = 'qwq-32b-preview',
+    openaiHeavyModel = 'qwq-32b-preview',
     openaiModelTemperature = '0.0',
     openaiRetries = '3',
     openaiTimeoutMS = '120000',
     openaiConcurrencyLimit = '6',
     githubConcurrencyLimit = '6',
-    apiBaseUrl = 'https://api.openai.com/v1',
-    language = 'en-US'
+    apiBaseUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    language = 'zh-CN'
   ) {
     this.debug = debug
     this.disableReview = disableReview
