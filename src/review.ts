@@ -457,17 +457,6 @@ ${RAW_SUMMARY_END_TAG}
 ${SHORT_SUMMARY_START_TAG}
 ${inputs.shortSummary}
 ${SHORT_SUMMARY_END_TAG}
-
----
-
-<details>
-<summary>Uplevel your code reviews with CodeRabbit Pro</summary>
-
-### CodeRabbit Pro
-
-If you like this project, please support us by purchasing the [Pro version](https://coderabbit.ai). The Pro version has advanced context, superior noise reduction and several proprietary improvements compared to the open source version. Moreover, CodeRabbit Pro is free for open source projects.
-
-</details>
 `
 
   statusMsg += `
@@ -721,18 +710,18 @@ ${
 ---
 
 <details>
-<summary>Tips</summary>
+<summary>提示</summary>
 
-### Chat with <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20">  CodeRabbit Bot (\`@coderabbitai\`)
-- Reply on review comments left by this bot to ask follow-up questions. A review comment is a comment on a diff or a file.
-- Invite the bot into a review comment chain by tagging \`@coderabbitai\` in a reply.
+### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> CodeRabbit 机器人 (\`@coderabbitai\`) 聊天
+- 回复此机器人留下的审查评论以提出后续问题。审查评论是对差异或文件的评论。
+- 通过在回复中标记 \`@coderabbitai\` 邀请机器人加入审查评论链。
 
-### Code suggestions
-- The bot may make code suggestions, but please review them carefully before committing since the line number ranges may be misaligned. 
-- You can edit the comment made by the bot and manually tweak the suggestion if it is slightly off.
+### 代码建议
+- 机器人可能会提出代码建议，但在提交前请仔细审查它们，因为行号范围可能会不对齐。
+- 你可以编辑机器人做出的评论，并在建议稍有偏差时手动调整。
 
-### Pausing incremental reviews
-- Add \`@coderabbitai: ignore\` anywhere in the PR description to pause further reviews from the bot.
+### 暂停增量审查
+- 在 PR 描述中的任何位置添加 \`@coderabbitai: ignore\` 以暂停机器人的进一步审查。
 
 </details>
 `

@@ -4,124 +4,112 @@ export class Prompts {
   summarize: string
   summarizeReleaseNotes: string
 
-  summarizeFileDiff = `## GitHub PR Title
+  summarizeFileDiff = `## GitHub PR 标题
 
 \`$title\` 
 
-## Description
+## 描述
 
 \`\`\`
 $description
 \`\`\`
 
-## Diff
+## 差异
 
 \`\`\`diff
 $file_diff
 \`\`\`
 
-## Instructions
+## 指令
 
-I would like you to succinctly summarize the diff within 100 words.
-If applicable, your summary should include a note about alterations 
-to the signatures of exported functions, global data structures and 
-variables, and any changes that might affect the external interface or 
-behavior of the code.
+请用100字以内简洁地总结这个差异。
+如果适用，你的总结应该包括对导出函数签名、全局数据结构和
+变量的更改说明，以及任何可能影响代码外部接口或
+行为的变更。
 `
-  triageFileDiff = `Below the summary, I would also like you to triage the diff as \`NEEDS_REVIEW\` or 
-\`APPROVED\` based on the following criteria:
+  triageFileDiff = `在总结下方，我还希望你根据以下标准将差异分类为 \`NEEDS_REVIEW\` 或 
+\`APPROVED\`：
 
-- If the diff involves any modifications to the logic or functionality, even if they 
-  seem minor, triage it as \`NEEDS_REVIEW\`. This includes changes to control structures, 
-  function calls, or variable assignments that might impact the behavior of the code.
-- If the diff only contains very minor changes that don't affect the code logic, such as 
-  fixing typos, formatting, or renaming variables for clarity, triage it as \`APPROVED\`.
+- 如果差异涉及对逻辑或功能的任何修改，即使看起来很小，也将其分类为 \`NEEDS_REVIEW\`。
+  这包括对控制结构、函数调用或可能影响代码行为的变量赋值的更改。
+- 如果差异只包含不影响代码逻辑的非常微小的更改，例如修复拼写错误、格式调整或
+  为清晰起见重命名变量，则将其分类为 \`APPROVED\`。
 
-Please evaluate the diff thoroughly and take into account factors such as the number of 
-lines changed, the potential impact on the overall system, and the likelihood of 
-introducing new bugs or security vulnerabilities. 
-When in doubt, always err on the side of caution and triage the diff as \`NEEDS_REVIEW\`.
+请彻底评估差异，并考虑诸如更改的行数、对整体系统的潜在影响以及
+引入新错误或安全漏洞的可能性等因素。
+如有疑问，请始终谨慎行事，将差异分类为 \`NEEDS_REVIEW\`。
 
-You must strictly follow the format below for triaging the diff:
-[TRIAGE]: <NEEDS_REVIEW or APPROVED>
+你必须严格按照以下格式对差异进行分类：
+[TRIAGE]: <NEEDS_REVIEW 或 APPROVED>
 
-Important:
-- In your summary do not mention that the file needs a through review or caution about
-  potential issues.
-- Do not provide any reasoning why you triaged the diff as \`NEEDS_REVIEW\` or \`APPROVED\`.
-- Do not mention that these changes affect the logic or functionality of the code in 
-  the summary. You must only use the triage status format above to indicate that.
+重要提示：
+- 在你的总结中不要提及该文件需要彻底审查或对潜在问题提出警告。
+- 不要提供任何关于你为什么将差异分类为 \`NEEDS_REVIEW\` 或 \`APPROVED\` 的理由。
+- 不要在总结中提及这些更改会影响代码的逻辑或功能。你必须只使用上述分类状态格式来表明这一点。
 `
-  summarizeChangesets = `Provided below are changesets in this pull request. Changesets 
-are in chronlogical order and new changesets are appended to the
-end of the list. The format consists of filename(s) and the summary 
-of changes for those files. There is a separator between each changeset.
-Your task is to deduplicate and group together files with
-related/similar changes into a single changeset. Respond with the updated 
-changesets using the same format as the input. 
+  summarizeChangesets = `以下是此拉取请求中的变更集。变更集按时间顺序排列，
+新的变更集附加在列表的末尾。格式包括文件名和这些文件的变更摘要。
+每个变更集之间有一个分隔符。
+你的任务是去重并将具有相关/相似变更的文件分组到一个变更集中。
+使用与输入相同的格式回复更新后的变更集。
 
 $raw_summary
 `
 
-  summarizePrefix = `Here is the summary of changes you have generated for files:
+  summarizePrefix = `以下是你为文件生成的变更摘要：
       \`\`\`
       $raw_summary
       \`\`\`
 
 `
 
-  summarizeShort = `Your task is to provide a concise summary of the changes. This 
-summary will be used as a prompt while reviewing each file and must be very clear for 
-the AI bot to understand. 
+  summarizeShort = `你的任务是提供对变更的简明摘要。这个摘要将在审查每个文件时
+用作提示，必须非常清晰，以便AI机器人理解。
 
-Instructions:
+指令：
 
-- Focus on summarizing only the changes in the PR and stick to the facts.
-- Do not provide any instructions to the bot on how to perform the review.
-- Do not mention that files need a through review or caution about potential issues.
-- Do not mention that these changes affect the logic or functionality of the code.
-- The summary should not exceed 500 words.
+- 专注于仅总结PR中的变更，并坚持事实。
+- 不要为机器人提供关于如何执行审查的任何指令。
+- 不要提及文件需要彻底审查或对潜在问题提出警告。
+- 不要提及这些变更会影响代码的逻辑或功能。
+- 摘要不应超过500字。
 `
 
-  reviewFileDiff = `## GitHub PR Title
+  reviewFileDiff = `## GitHub PR 标题
 
 \`$title\` 
 
-## Description
+## 描述
 
 \`\`\`
 $description
 \`\`\`
 
-## Summary of changes
+## 变更摘要
 
 \`\`\`
 $short_summary
 \`\`\`
 
-## IMPORTANT Instructions
+## 重要指令
 
-Input: New hunks annotated with line numbers and old hunks (replaced code). Hunks represent incomplete code fragments.
-Additional Context: PR title, description, summaries and comment chains.
-Task: Review new hunks for substantive issues using provided context and respond with comments if necessary.
-Output: Review comments in markdown with exact line number ranges in new hunks. Start and end line numbers must be within the same hunk. For single-line comments, start=end line number. Must use example response format below.
-Use fenced code blocks using the relevant language identifier where applicable.
-Don't annotate code snippets with line numbers. Format and indent code correctly.
-Do not use \`suggestion\` code blocks.
-For fixes, use \`diff\` code blocks, marking changes with \`+\` or \`-\`. The line number range for comments with fix snippets must exactly match the range to replace in the new hunk.
+输入：带有行号的新代码块和旧代码块（被替换的代码）。代码块代表不完整的代码片段。
+附加上下文：PR标题、描述、摘要和评论链。
+任务：使用提供的上下文审查新代码块中的实质性问题，并在必要时提出评论。
+输出：使用markdown格式的审查评论，包含新代码块中的精确行号范围。起始和结束行号必须在同一代码块内。对于单行评论，起始=结束行号。必须使用下面的示例响应格式。
+使用带有相关语言标识符的围栏代码块（如适用）。
+不要用行号注释代码片段。正确格式化和缩进代码。
+不要使用 \`suggestion\` 代码块。
+对于修复，使用 \`diff\` 代码块，用 \`+\` 或 \`-\` 标记更改。带有修复片段的评论的行号范围必须与新代码块中要替换的范围完全匹配。
 
-- Do NOT provide general feedback, summaries, explanations of changes, or praises 
-  for making good additions. 
-- Focus solely on offering specific, objective insights based on the 
-  given context and refrain from making broad comments about potential impacts on 
-  the system or question intentions behind the changes.
+- 不要提供一般性反馈、摘要、对变更的解释或对良好添加的赞扬。
+- 仅专注于基于给定上下文提供具体、客观的见解，避免对系统潜在影响做出广泛评论或质疑变更背后的意图。
 
-If there are no issues found on a line range, you MUST respond with the 
-text \`LGTM!\` for that line range in the review section. 
+如果在某个行范围内没有发现问题，你必须在审查部分对该行范围回复文本 \`LGTM!\`。
 
-## Example
+## 示例
 
-### Example changes
+### 示例变更
 
 ---new_hunk---
 \`\`\`
@@ -153,15 +141,15 @@ def subtract(x, y):
 
 ---comment_chains---
 \`\`\`
-Please review this change.
+请审查此更改。
 \`\`\`
 
 ---end_change_section---
 
-### Example response
+### 示例响应
 
 22-22:
-There's a syntax error in the add function.
+add函数中有一个语法错误。
 \`\`\`diff
 -    retrn z
 +    return z
@@ -171,66 +159,62 @@ There's a syntax error in the add function.
 LGTM!
 ---
 
-## Changes made to \`$filename\` for your review
+## 对 \`$filename\` 的变更，请您审查
 
 $patches
 `
 
-  comment = `A comment was made on a GitHub PR review for a 
-diff hunk on a file - \`$filename\`. I would like you to follow 
-the instructions in that comment. 
+  comment = `在GitHub PR审查中，有人对文件 \`$filename\` 的差异块发表了评论。
+我希望你按照该评论中的指示操作。
 
-## GitHub PR Title
+## GitHub PR 标题
 
 \`$title\`
 
-## Description
+## 描述
 
 \`\`\`
 $description
 \`\`\`
 
-## Summary generated by the AI bot
+## AI机器人生成的摘要
 
 \`\`\`
 $short_summary
 \`\`\`
 
-## Entire diff
+## 完整差异
 
 \`\`\`diff
 $file_diff
 \`\`\`
 
-## Diff being commented on
+## 被评论的差异
 
 \`\`\`diff
 $diff
 \`\`\`
 
-## Instructions
+## 指令
 
-Please reply directly to the new comment (instead of suggesting 
-a reply) and your reply will be posted as-is.
+请直接回复新评论（而不是建议回复），你的回复将按原样发布。
 
-If the comment contains instructions/requests for you, please comply. 
-For example, if the comment is asking you to generate documentation 
-comments on the code, in your reply please generate the required code.
+如果评论包含对你的指示/请求，请遵守。例如，如果评论要求你为代码生成
+文档注释，请在回复中生成所需的代码。
 
-In your reply, please make sure to begin the reply by tagging the user 
-with "@user".
+在你的回复中，请确保以标记用户开始回复，格式为"@user"。
 
-## Comment format
+## 评论格式
 
-\`user: comment\`
+\`user: 评论\`
 
-## Comment chain (including the new comment)
+## 评论链（包括新评论）
 
 \`\`\`
 $comment_chain
 \`\`\`
 
-## The comment/request that you need to directly reply to
+## 你需要直接回复的评论/请求
 
 \`\`\`
 $comment
