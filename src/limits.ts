@@ -5,8 +5,8 @@ interface ModelTokens {
 
 const modelTokensMap: Record<string, ModelTokens> = {
   'default': {
-    maxTokens: 4000,
-    responseTokens: 1000,
+    maxTokens: 32_768,
+    responseTokens: 8_192,
   },
   'gpt-4-32k': {
     maxTokens: 32600,
