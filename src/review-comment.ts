@@ -122,7 +122,7 @@ export const handleReviewComment = async (
           await commenter.reviewCommentReply(
             pullNumber,
             topLevelComment,
-            'Cannot reply to this comment as diff could not be found.'
+            '无法回答此评论，因为找不到差异。'
           )
           return
         }
@@ -135,7 +135,7 @@ export const handleReviewComment = async (
         await commenter.reviewCommentReply(
           pullNumber,
           topLevelComment,
-          'Cannot reply to this comment as diff being commented is too large and exceeds the token limit.'
+          '无法回复此评论，因为被评论的 diff 太大，超过了令牌限制。'
         )
         return
       }
