@@ -512,6 +512,93 @@ ${
     const reviewsFailed: string[] = []
     let lgtmCount = 0
     let reviewCount = 0
+    
+    // 处理大型 diff 的辅助函数
+    const processLargeDiff = async (
+      filename: string,
+      fileContent: string,
+      patches: Array<[number, number, string]>,
+      ins: Inputs
+    ): Promise<void> => {
+      // 计算 tokens
+      let tokens = getTokenCount(prompts.renderReviewFileDiff(ins))
+      let patchesToPack = 0
+      
+      // 按照重要性对 patches 进行排序
+      const patchesWithImportance = patches.map(([startLine, endLine, patch]) => {
+        const { importance } = evaluatePatchImportance(patch)
+        return { startLine, endLine, patch, importance }
+      }).sort((a, b) => b.importance - a.importance)  // 按重要性降序排序
+
+      // 尽可能多地打包重要的 patches
+      const selectedPatches: Array<[number, number, string]> = []
+      for (const { startLine, endLine, patch } of patchesWithImportance) {
+        const patchTokens = getTokenCount(patch)
+        if (tokens + patchTokens <= options.heavyTokenLimits.requestTokens) {
+          selectedPatches.push([startLine, endLine, patch])
+          tokens += patchTokens
+          patchesToPack += 1
+        }
+      }
+
+      // 合并相邻的 patches
+      const mergedPatches = mergePatchesIfNeeded(selectedPatches)
+
+      // 添加到输入中
+      for (const [, , patch] of mergedPatches) {
+        ins.patches += `${patch}\n---patch_separator---\n`
+      }
+
+      // 执行审查
+      try {
+        const [response] = await heavyBot.chat(
+          prompts.renderReviewFileDiff(ins),
+          {}
+        )
+        if (response === '') {
+          info('review: nothing obtained from openai')
+          reviewsFailed.push(`${filename} (no response)`)
+          return
+        }
+
+        const reviews = parseReview(response, patches, options.debug)
+        for (const review of reviews) {
+          if (
+            !options.reviewCommentLGTM &&
+            (review.comment.includes('LGTM') ||
+              review.comment.includes('looks good to me'))
+          ) {
+            lgtmCount += 1
+            continue
+          }
+
+          if (context.payload.pull_request == null) {
+            warning('No pull request found, skipping.')
+            continue
+          }
+
+          try {
+            reviewCount += 1
+            await commenter.bufferReviewComment(
+              filename,
+              review.startLine,
+              review.endLine,
+              `${review.comment}`
+            )
+          } catch (e: any) {
+            reviewsFailed.push(`${filename} comment failed (${e as string})`)
+          }
+        }
+      } catch (e: any) {
+        warning(
+          `Failed to review: ${e as string}, skipping. backtrace: ${
+            e.stack as string
+          }`
+        )
+        reviewsFailed.push(`${filename} (${e as string})`)
+      }
+    }
+    
     const doReview = async (
       filename: string,
       fileContent: string,
@@ -522,140 +609,76 @@ ${
       const ins: Inputs = inputs.clone()
       ins.filename = filename
 
-      // calculate tokens based on inputs so far
-      let tokens = getTokenCount(prompts.renderReviewFileDiff(ins))
-      // loop to calculate total patch tokens
-      let patchesToPack = 0
-      for (const [, , patch] of patches) {
-        const patchTokens = getTokenCount(patch)
-        if (tokens + patchTokens > options.heavyTokenLimits.requestTokens) {
-          info(
-            `only packing ${patchesToPack} / ${patches.length} patches, tokens: ${tokens} / ${options.heavyTokenLimits.requestTokens}`
-          )
-          break
-        }
-        tokens += patchTokens
-        patchesToPack += 1
+      // 获取整个文件的 diff
+      const fullFileDiff = patches
+        .sort((a, b) => a[0] - b[0])  // 按照开始行号排序
+        .map(([, , patch]) => patch)
+        .join('\n---patch_separator---\n')
+
+      // 计算 tokens
+      const baseTokens = getTokenCount(prompts.renderReviewFileDiff(ins))
+      const diffTokens = getTokenCount(fullFileDiff)
+      const totalTokens = baseTokens + diffTokens
+
+      if (totalTokens > options.heavyTokenLimits.requestTokens) {
+        info(`File diff too large (${totalTokens} tokens), splitting into smaller chunks`)
+        // 如果整个文件的 diff 太大，回退到分块处理方式
+        await processLargeDiff(filename, fileContent, patches, ins)
+        return
       }
 
-      let patchesPacked = 0
-      for (const [startLine, endLine, patch] of patches) {
-        if (context.payload.pull_request == null) {
-          warning('No pull request found, skipping.')
-          continue
+      // 将整个文件的 diff 添加到输入中
+      ins.patches = fullFileDiff
+
+      try {
+        // 执行一次性代码审查
+        const [response] = await heavyBot.chat(
+          prompts.renderReviewFileDiff(ins),
+          {}
+        )
+
+        if (response === '') {
+          info('review: nothing obtained from openai')
+          reviewsFailed.push(`${filename} (no response)`)
+          return
         }
-        // see if we can pack more patches into this request
-        if (patchesPacked >= patchesToPack) {
-          info(
-            `unable to pack more patches into this request, packed: ${patchesPacked}, total patches: ${patches.length}, skipping.`
-          )
-          if (options.debug) {
-            info(`prompt so far: ${prompts.renderReviewFileDiff(ins)}`)
+
+        // 解析审查结果
+        const reviews = parseReview(response, patches, options.debug)
+        for (const review of reviews) {
+          if (
+            !options.reviewCommentLGTM &&
+            (review.comment.includes('LGTM') ||
+              review.comment.includes('looks good to me'))
+          ) {
+            lgtmCount += 1
+            continue
           }
-          break
-        }
-        patchesPacked += 1
 
-        let commentChain = ''
-        try {
-          const allChains = await commenter.getCommentChainsWithinRange(
-            context.payload.pull_request.number,
-            filename,
-            startLine,
-            endLine,
-            COMMENT_REPLY_TAG
-          )
-
-          if (allChains.length > 0) {
-            info(`Found comment chains: ${allChains} for ${filename}`)
-            commentChain = allChains
+          if (context.payload.pull_request == null) {
+            warning('No pull request found, skipping.')
+            continue
           }
-        } catch (e: any) {
-          warning(
-            `Failed to get comments: ${e as string}, skipping. backtrace: ${
-              e.stack as string
-            }`
-          )
-        }
-        // try packing comment_chain into this request
-        const commentChainTokens = getTokenCount(commentChain)
-        if (
-          tokens + commentChainTokens >
-          options.heavyTokenLimits.requestTokens
-        ) {
-          commentChain = ''
-        } else {
-          tokens += commentChainTokens
-        }
 
-        ins.patches += `
-${patch}
-`
-        if (commentChain !== '') {
-          ins.patches += `
----comment_chains---
-\`\`\`
-${commentChain}
-\`\`\`
-`
-        }
-
-        ins.patches += `
----end_change_section---
-`
-      }
-
-      if (patchesPacked > 0) {
-        // perform review
-        try {
-          const [response] = await heavyBot.chat(
-            prompts.renderReviewFileDiff(ins),
-            {}
-          )
-          if (response === '') {
-            info('review: nothing obtained from openai')
-            reviewsFailed.push(`${filename} (no response)`)
-            return
+          try {
+            reviewCount += 1
+            await commenter.bufferReviewComment(
+              filename,
+              review.startLine,
+              review.endLine,
+              `${review.comment}`
+            )
+          } catch (e: any) {
+            reviewsFailed.push(`${filename} comment failed (${e as string})`)
           }
-          // parse review
-          const reviews = parseReview(response, patches, options.debug)
-          for (const review of reviews) {
-            // check for LGTM
-            if (
-              !options.reviewCommentLGTM &&
-              (review.comment.includes('LGTM') ||
-                review.comment.includes('looks good to me'))
-            ) {
-              lgtmCount += 1
-              continue
-            }
-            if (context.payload.pull_request == null) {
-              warning('No pull request found, skipping.')
-              continue
-            }
-
-            try {
-              reviewCount += 1
-              await commenter.bufferReviewComment(
-                filename,
-                review.startLine,
-                review.endLine,
-                `${review.comment}`
-              )
-            } catch (e: any) {
-              reviewsFailed.push(`${filename} comment failed (${e as string})`)
-            }
-          }
-        } catch (e: any) {
-          warning(
-            `Failed to review: ${e as string}, skipping. backtrace: ${
-              e.stack as string
-            }`
-          )
-          reviewsFailed.push(`${filename} (${e as string})`)
         }
-      } else {
-        reviewsSkipped.push(`${filename} (diff too large)`)
+      } catch (e: any) {
+        warning(
+          `Failed to review: ${e as string}, skipping. backtrace: ${
+            e.stack as string
+          }`
+        )
+        reviewsFailed.push(`${filename} (${e as string})`)
       }
     }
 
@@ -1006,4 +1029,124 @@ ${review.comment}`
   storeReview()
 
   return reviews
+}
+
+// 添加一个函数来评估代码块的重要性
+function evaluatePatchImportance(
+  patch: string
+): { importance: number; reason: string } {
+  // 默认重要性为中等
+  let importance = 0.5
+  let reason = '默认中等重要性'
+
+  // 如果代码块很小（少于3行），降低重要性
+  const lines = patch.split('\n')
+  if (lines.length < 3) {
+    importance = 0.2
+    reason = '代码块很小（少于3行）'
+    return { importance, reason }
+  }
+
+  // 检查是否包含关键字，提高重要性
+  const keywordsHigh = [
+    'function', 'class', 'interface', 'export', 'import', 
+    'constructor', 'async', 'await', 'try', 'catch', 
+    'if', 'else', 'switch', 'case', 'for', 'while', 'do',
+    'return', 'throw', 'new', 'delete', 'typeof', 'instanceof'
+  ]
+  
+  // 检查是否只是简单的修改，降低重要性
+  const keywordsLow = [
+    'console.log', 'TODO', 'FIXME', 'NOTE', 
+    'eslint-disable', '// ', '/* ', ' */'
+  ]
+
+  // 计算关键字出现的次数
+  let highKeywordCount = 0
+  let lowKeywordCount = 0
+  
+  for (const line of lines) {
+    for (const keyword of keywordsHigh) {
+      if (line.includes(keyword)) {
+        highKeywordCount++
+      }
+    }
+    
+    for (const keyword of keywordsLow) {
+      if (line.includes(keyword)) {
+        lowKeywordCount++
+      }
+    }
+  }
+
+  // 根据关键字出现的次数调整重要性
+  if (highKeywordCount > 2) {
+    importance = 0.8
+    reason = `包含多个高重要性关键字 (${highKeywordCount})`
+  } else if (lowKeywordCount > highKeywordCount && lines.length < 10) {
+    importance = 0.3
+    reason = `主要包含低重要性内容 (${lowKeywordCount})`
+  }
+
+  // 检查是否包含复杂逻辑
+  const complexityIndicators = ['{', '}', 'if', 'else', 'for', 'while', 'switch', 'try', 'catch']
+  let complexityCount = 0
+  
+  for (const line of lines) {
+    for (const indicator of complexityIndicators) {
+      if (line.includes(indicator)) {
+        complexityCount++
+      }
+    }
+  }
+  
+  if (complexityCount > 3) {
+    importance = Math.max(importance, 0.7)
+    reason = `包含复杂逻辑 (复杂度: ${complexityCount})`
+  }
+
+  return { importance, reason }
+}
+
+// 合并相邻的小代码块
+function mergePatchesIfNeeded(
+  patches: Array<[number, number, string]>,
+  maxPatchSize: number = 100
+): Array<[number, number, string]> {
+  if (patches.length <= 1) {
+    return patches
+  }
+
+  const mergedPatches: Array<[number, number, string]> = []
+  let currentPatch: [number, number, string] | null = null
+
+  for (const patch of patches) {
+    if (currentPatch === null) {
+      currentPatch = [...patch]
+      continue
+    }
+
+    const [currentStartLine, currentEndLine, currentPatchStr] = currentPatch as [number, number, string]
+    const [nextStartLine, nextEndLine, nextPatchStr] = patch
+
+    // 如果两个代码块相距不远且合并后不会太大，则合并它们
+    if (nextStartLine - currentEndLine < 10 && 
+        currentPatchStr.split('\n').length + nextPatchStr.split('\n').length < maxPatchSize) {
+      // 合并两个代码块
+      currentPatch = [
+        currentStartLine,
+        nextEndLine,
+        `${currentPatchStr}\n---merged_patch---\n${nextPatchStr}`
+      ]
+    } else {
+      mergedPatches.push(currentPatch)
+      currentPatch = [...patch]
+    }
+  }
+
+  if (currentPatch !== null) {
+    mergedPatches.push(currentPatch)
+  }
+
+  return mergedPatches
 }
