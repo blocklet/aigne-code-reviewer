@@ -47,6 +47,14 @@ const modelTokensMap: Record<string, ModelTokens> = {
   'qwq-32b-preview': {
     maxTokens: 30_720,
     responseTokens: 16_384,
+  },
+  'gemini-2.0-flash-lite': {
+    maxTokens: 10_000_000,
+    responseTokens: 8_000
+  },
+  'gemini-2.0-flash': {
+    maxTokens: 10_000_000,
+    responseTokens: 8_000
   }
 }
 
