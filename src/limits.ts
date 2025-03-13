@@ -57,7 +57,7 @@ export class TokenLimits {
   knowledgeCutOff: string
 
   constructor(model = 'gpt-3.5-turbo') {
-    this.knowledgeCutOff = '2021-09-01'
+    this.knowledgeCutOff = '2024-12-01'
     const modelTokens = modelTokensMap[model] || modelTokensMap['default']
 
     // 设置最大tokens和响应tokens
