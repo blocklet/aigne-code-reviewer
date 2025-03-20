@@ -1,14 +1,14 @@
 # CodeRabbit Pro
 
 This is an old version of [CodeRabbit](http://coderabbit.ai) and is now in the maintenance mode.
-We recommend installing the Pro version from [CodeRabbit](http://coderabbit.ai). The Pro version is a total redesign and offers significantly better reviews that learn from your usage and improve over time. CodeRabbit Pro is free for open source projects. 
+We recommend installing the Pro version from [CodeRabbit](http://coderabbit.ai). The Pro version is a total redesign and offers significantly better reviews that learn from your usage and improve over time. CodeRabbit Pro is free for open source projects.
 
 [![Discord](https://img.shields.io/badge/Join%20us%20on-Discord-blue?logo=discord&style=flat-square)](https://discord.gg/GsXnASn26c)
 
 # AI-based PR reviewer and summarizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/github/last-commit/coderabbitai/ai-pr-reviewer/main?style=flat-square)](https://github.com/coderabbitai/ai-pr-reviewer/commits/main)
+[![GitHub](https://img.shields.io/github/last-commit/blocklet/ai-pr-reviewer/main?style=flat-square)](https://github.com/blocklet/ai-pr-reviewer/commits/main)
 
 ## Overview
 
@@ -49,14 +49,23 @@ configure the required environment variables, such as `GITHUB_TOKEN` and
 `OPENAI_API_KEY`. For more information on usage, examples, contributing, and
 FAQs, you can refer to the sections below.
 
-- [Overview](#overview)
-- [Professional Version of CodeRabbit](#professional-version-of-coderabbit)
-- [Reviewer Features](#reviewer-features)
-- [Install instructions](#install-instructions)
-- [Conversation with CodeRabbit](#conversation-with-coderabbit)
-- [Examples](#examples)
-- [Contribute](#contribute)
-- [FAQs](#faqs)
+- [CodeRabbit Pro](#coderabbit-pro)
+- [AI-based PR reviewer and summarizer](#ai-based-pr-reviewer-and-summarizer)
+  - [Overview](#overview)
+  - [Reviewer Features:](#reviewer-features)
+  - [Install instructions](#install-instructions)
+      - [Environment variables](#environment-variables)
+    - [Models: `gpt-4` and `gpt-3.5-turbo`](#models-gpt-4-and-gpt-35-turbo)
+    - [Prompts \& Configuration](#prompts--configuration)
+  - [Conversation with CodeRabbit](#conversation-with-coderabbit)
+    - [Ignoring PRs](#ignoring-prs)
+  - [Examples](#examples)
+  - [Contribute](#contribute)
+    - [Developing](#developing)
+  - [FAQs](#faqs)
+    - [Review pull requests from forks](#review-pull-requests-from-forks)
+    - [Inspect the messages between OpenAI server](#inspect-the-messages-between-openai-server)
+    - [Disclaimer](#disclaimer)
 
 
 ## Install instructions
@@ -87,7 +96,7 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: coderabbitai/ai-pr-reviewer@latest
+      - uses: blocklet/ai-pr-reviewer@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -247,9 +256,9 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: coderabbitai/ai-pr-reviewer@latest
+      - uses: blocklet/ai-pr-reviewer@latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
           debug: false
