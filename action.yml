@@ -146,16 +146,16 @@ inputs:
   openai_base_url:
     required: false
     description: '兼容 OpenAI API 接口的 URL。'
-    default: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+    default: 'https://api.openai.com/v1'
   openai_light_model:
     required: false
     description:
       '用于简单任务的模型，如总结文件差异。'
-    default: 'qwq-32b-preview'
+    default: 'gpt-4o'
   openai_heavy_model:
     required: false
     description: '用于复杂任务的模型，如代码审查。'
-    default: 'qwq-32b-preview'
+    default: 'gpt-4o'
   openai_model_temperature:
     required: false
     description: '模型的温度参数'
