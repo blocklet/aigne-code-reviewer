@@ -30,8 +30,8 @@ importers:
         specifier: ^4.1.3
         version: 4.1.6(@octokit/core@5.2.1)
       '@octokit/plugin-throttling':
-        specifier: ^6.1.0
-        version: 6.1.0(@octokit/core@5.2.1)
+        specifier: ^9.6.0
+        version: 9.6.0(@octokit/core@5.2.1)
       minimatch:
         specifier: ^9.0.1
         version: 9.0.5
@@ -667,11 +667,11 @@ packages:
     peerDependencies:
       '@octokit/core': '>=3'
 
-  '@octokit/plugin-throttling@6.1.0':
-    resolution: {integrity: sha512-JqMbTiPC0sUSTsLQsdq3JVx1mx8UtTo5mwR80YqPXE93+XhevvSyOR1rO2Z+NbO/r0TK4hqFJSSi/9oIZBxZTg==}
+  '@octokit/plugin-throttling@9.6.0':
+    resolution: {integrity: sha512-zn7m1N3vpJDaVzLqjCRdJ0cRzNiekHEWPi8Ww9xyPNrDt5PStHvVE0eR8wy4RSU8Eg7YO8MHyvn6sv25EGVhhg==}
     engines: {node: '>= 18'}
     peerDependencies:
-      '@octokit/core': ^4.0.0
+      '@octokit/core': ^6.1.3
 
   '@octokit/request-error@2.1.0':
     resolution: {integrity: sha512-1VIvgXxs9WHSjicsRwq8PlR2LR2x6DwsJAaFgzdi0JfJoGSO8mYI/cHJQ+9FbN21aa+DrgNLnwObmyeSC8Rmpg==}
@@ -4321,10 +4321,10 @@ snapshots:
       '@octokit/types': 9.3.2
       bottleneck: 2.19.5
 
-  '@octokit/plugin-throttling@6.1.0(@octokit/core@5.2.1)':
+  '@octokit/plugin-throttling@9.6.0(@octokit/core@5.2.1)':
     dependencies:
       '@octokit/core': 5.2.1
-      '@octokit/types': 9.3.2
+      '@octokit/types': 13.10.0
       bottleneck: 2.19.5
 
   '@octokit/request-error@2.1.0':
