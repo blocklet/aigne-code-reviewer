@@ -3,7 +3,7 @@ description: 'AIGNE-based PR Reviewer & Summarizer with Chat Capabilities'
 branding:
   icon: 'git-merge'
   color: 'orange'
-author: 'CodeRabbit LLC'
+author: 'ArcBlock Inc.'
 inputs:
   debug:
     required: false
