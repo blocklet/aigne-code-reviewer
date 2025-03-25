@@ -152,11 +152,11 @@ inputs:
     required: false
     description:
       'Model to use for simple tasks like summarizing diff on a file.'
-    default: 'claude-3-7-sonnet-20250219'
+    default: 'claude-3-5-sonnet-latest'
   openai_heavy_model:
     required: false
     description: 'Model to use for complex tasks such as code reviews.'
-    default: 'claude-3-7-sonnet-20250219'
+    default: 'claude-3-5-sonnet-latest'
   openai_model_temperature:
     required: false
     description: 'Temperature for GPT model'

@@ -9158,7 +9158,7 @@ const modelTokensMap = {
         maxTokens: 8000,
         responseTokens: 2000
     },
-    'claude-3-7-sonnet-20250219': {
+    'claude-3-5-sonnet-latest': {
         maxTokens: 200_000,
         responseTokens: 8192
     },
@@ -9242,7 +9242,7 @@ class Options {
     heavyTokenLimits;
     apiBaseUrl;
     language;
-    constructor(debug, disableReview, disableReleaseNotes, maxFiles = '0', reviewSimpleChanges = false, reviewCommentLGTM = false, pathFilters = null, systemMessage = '', openaiLightModel = 'claude-3-7-sonnet-20250219', openaiHeavyModel = 'claude-3-7-sonnet-20250219', openaiModelTemperature = '0.0', openaiRetries = '3', openaiTimeoutMS = '120000', openaiConcurrencyLimit = '6', githubConcurrencyLimit = '6', apiBaseUrl = 'https://api.anthropic.com/v1', language = 'en-US') {
+    constructor(debug, disableReview, disableReleaseNotes, maxFiles = '0', reviewSimpleChanges = false, reviewCommentLGTM = false, pathFilters = null, systemMessage = '', openaiLightModel = 'claude-3-5-sonnet-latest', openaiHeavyModel = 'claude-3-5-sonnet-latest', openaiModelTemperature = '0.0', openaiRetries = '3', openaiTimeoutMS = '120000', openaiConcurrencyLimit = '6', githubConcurrencyLimit = '6', apiBaseUrl = 'https://api.anthropic.com/v1', language = 'en-US') {
         this.debug = debug;
         this.disableReview = disableReview;
         this.disableReleaseNotes = disableReleaseNotes;

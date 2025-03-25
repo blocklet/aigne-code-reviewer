@@ -20,7 +20,7 @@ const modelTokensMap: Record<string, ModelTokens> = {
     maxTokens: 8000,
     responseTokens: 2000
   },
-  'claude-3-7-sonnet-20250219': {
+  'claude-3-5-sonnet-latest': {
     maxTokens: 200_000,
     responseTokens: 8192
   },
