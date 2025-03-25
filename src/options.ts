@@ -138,7 +138,7 @@ export class PathFilter {
   }
 }
 
-export class OpenAIOptions {
+export class ModelOptions {
   model: string
   tokenLimits: TokenLimits
 

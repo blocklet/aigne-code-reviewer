@@ -9,7 +9,7 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from 'chatgpt'
 import pRetry from 'p-retry'
-import { OpenAIOptions, Options } from './options'
+import { ModelOptions, Options } from './options'
 
 // define type to save parentMessageId and conversationId
 export interface Ids {
@@ -22,11 +22,11 @@ export class Bot {
 
   private readonly options: Options
 
-  constructor(options: Options, openaiOptions: OpenAIOptions) {
+  constructor(options: Options, openaiOptions: ModelOptions) {
     this.options = options
     if (process.env.OPENAI_API_KEY) {
       const currentDate = new Date().toISOString().split('T')[0]
-      const systemMessage = `${options.systemMessage} 
+      const systemMessage = `${options.systemMessage}
 Knowledge cutoff: ${openaiOptions.tokenLimits.knowledgeCutOff}
 Current date: ${currentDate}
 
