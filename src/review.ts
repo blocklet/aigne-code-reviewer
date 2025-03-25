@@ -5,7 +5,6 @@ import pLimit from 'p-limit'
 import {type Bot} from './bot'
 import {
   Commenter,
-  COMMENT_REPLY_TAG,
   RAW_SUMMARY_END_TAG,
   RAW_SUMMARY_START_TAG,
   SHORT_SUMMARY_END_TAG,
@@ -525,14 +524,16 @@ ${
       let patchesToPack = 0
 
       // 按照重要性对 patches 进行排序
-      const patchesWithImportance = patches.map(([startLine, endLine, patch]) => {
-        const { importance } = evaluatePatchImportance(patch)
-        return { startLine, endLine, patch, importance }
-      }).sort((a, b) => b.importance - a.importance)  // 按重要性降序排序
+      const patchesWithImportance = patches
+        .map(([startLine, endLine, patch]) => {
+          const {importance} = evaluatePatchImportance(patch)
+          return {startLine, endLine, patch, importance}
+        })
+        .sort((a, b) => b.importance - a.importance) // 按重要性降序排序
 
       // 尽可能多地打包重要的 patches
       const selectedPatches: Array<[number, number, string]> = []
-      for (const { startLine, endLine, patch } of patchesWithImportance) {
+      for (const {startLine, endLine, patch} of patchesWithImportance) {
         const patchTokens = getTokenCount(patch)
         if (tokens + patchTokens <= options.heavyTokenLimits.requestTokens) {
           selectedPatches.push([startLine, endLine, patch])
@@ -611,7 +612,7 @@ ${
 
       // 获取整个文件的 diff
       const fullFileDiff = patches
-        .sort((a, b) => a[0] - b[0])  // 按照开始行号排序
+        .sort((a, b) => a[0] - b[0]) // 按照开始行号排序
         .map(([, , patch]) => patch)
         .join('\n---patch_separator---\n')
 
@@ -621,7 +622,9 @@ ${
       const totalTokens = baseTokens + diffTokens
 
       if (totalTokens > options.heavyTokenLimits.requestTokens) {
-        info(`File diff too large (${totalTokens} tokens), splitting into smaller chunks`)
+        info(
+          `File diff too large (${totalTokens} tokens), splitting into smaller chunks`
+        )
         // 如果整个文件的 diff 太大，回退到分块处理方式
         await processLargeDiff(filename, fileContent, patches, ins)
         return
@@ -1032,9 +1035,10 @@ ${review.comment}`
 }
 
 // 添加一个函数来评估代码块的重要性
-function evaluatePatchImportance(
-  patch: string
-): { importance: number; reason: string } {
+function evaluatePatchImportance(patch: string): {
+  importance: number
+  reason: string
+} {
   // 默认重要性为中等
   let importance = 0.5
   let reason = '默认中等重要性'
@@ -1044,21 +1048,46 @@ function evaluatePatchImportance(
   if (lines.length < 3) {
     importance = 0.2
     reason = '代码块很小（少于3行）'
-    return { importance, reason }
+    return {importance, reason}
   }
 
   // 检查是否包含关键字，提高重要性
   const keywordsHigh = [
-    'function', 'class', 'interface', 'export', 'import',
-    'constructor', 'async', 'await', 'try', 'catch',
-    'if', 'else', 'switch', 'case', 'for', 'while', 'do',
-    'return', 'throw', 'new', 'delete', 'typeof', 'instanceof'
+    'function',
+    'class',
+    'interface',
+    'export',
+    'import',
+    'constructor',
+    'async',
+    'await',
+    'try',
+    'catch',
+    'if',
+    'else',
+    'switch',
+    'case',
+    'for',
+    'while',
+    'do',
+    'return',
+    'throw',
+    'new',
+    'delete',
+    'typeof',
+    'instanceof'
   ]
 
   // 检查是否只是简单的修改，降低重要性
   const keywordsLow = [
-    'console.log', 'TODO', 'FIXME', 'NOTE',
-    'eslint-disable', '// ', '/* ', ' */'
+    'console.log',
+    'TODO',
+    'FIXME',
+    'NOTE',
+    'eslint-disable',
+    '// ',
+    '/* ',
+    ' */'
   ]
 
   // 计算关键字出现的次数
@@ -1089,7 +1118,17 @@ function evaluatePatchImportance(
   }
 
   // 检查是否包含复杂逻辑
-  const complexityIndicators = ['{', '}', 'if', 'else', 'for', 'while', 'switch', 'try', 'catch']
+  const complexityIndicators = [
+    '{',
+    '}',
+    'if',
+    'else',
+    'for',
+    'while',
+    'switch',
+    'try',
+    'catch'
+  ]
   let complexityCount = 0
 
   for (const line of lines) {
@@ -1105,7 +1144,7 @@ function evaluatePatchImportance(
     reason = `包含复杂逻辑 (复杂度: ${complexityCount})`
   }
 
-  return { importance, reason }
+  return {importance, reason}
 }
 
 // 合并相邻的小代码块
@@ -1126,12 +1165,16 @@ function mergePatchesIfNeeded(
       continue
     }
 
-    const [currentStartLine, currentEndLine, currentPatchStr] = currentPatch as [number, number, string]
+    const [currentStartLine, currentEndLine, currentPatchStr] =
+      currentPatch as [number, number, string]
     const [nextStartLine, nextEndLine, nextPatchStr] = patch
 
     // 如果两个代码块相距不远且合并后不会太大，则合并它们
-    if (nextStartLine - currentEndLine < 10 &&
-        currentPatchStr.split('\n').length + nextPatchStr.split('\n').length < maxPatchSize) {
+    if (
+      nextStartLine - currentEndLine < 10 &&
+      currentPatchStr.split('\n').length + nextPatchStr.split('\n').length <
+        maxPatchSize
+    ) {
       // 合并两个代码块
       currentPatch = [
         currentStartLine,

@@ -4,49 +4,49 @@ interface ModelTokens {
 }
 
 const modelTokensMap: Record<string, ModelTokens> = {
-  'default': {
+  default: {
     maxTokens: 32_768,
-    responseTokens: 8_192,
+    responseTokens: 8_192
   },
   'gpt-4-32k': {
     maxTokens: 32600,
-    responseTokens: 4000,
+    responseTokens: 4000
   },
   'gpt-3.5-turbo-16k': {
     maxTokens: 16300,
-    responseTokens: 3000,
+    responseTokens: 3000
   },
   'gpt-4': {
     maxTokens: 8000,
-    responseTokens: 2000,
+    responseTokens: 2000
   },
   'qwen-coder-plus': {
     maxTokens: 129_024,
-    responseTokens: 8192,
+    responseTokens: 8192
   },
   'qwen-coder-plus-latest': {
     maxTokens: 129_024,
-    responseTokens: 8192,
+    responseTokens: 8192
   },
   'qwen-coder-turbo': {
     maxTokens: 129_024,
-    responseTokens: 8192,
+    responseTokens: 8192
   },
   'qwen-coder-turbo-latest': {
     maxTokens: 129_024,
-    responseTokens: 8192,
+    responseTokens: 8192
   },
   'qwq-plus': {
     maxTokens: 98_304,
-    responseTokens: 8192,
+    responseTokens: 8192
   },
   'qwq-plus-latest': {
     maxTokens: 98_304,
-    responseTokens: 8192,
+    responseTokens: 8192
   },
   'qwq-32b-preview': {
     maxTokens: 30_720,
-    responseTokens: 16_384,
+    responseTokens: 16_384
   },
   'gemini-2.0-flash-lite': {
     maxTokens: 10_000_000,

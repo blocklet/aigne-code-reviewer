@@ -143,19 +143,19 @@ inputs:
     required: false
     description: '禁用发布说明'
     default: 'false'
-  openai_base_url:
+  anthropic_base_url:
     required: false
-    description: '兼容 OpenAI API 接口的 URL。'
-    default: 'https://api.openai.com/v1'
-  openai_light_model:
+    description: '兼容 Anthropic API 接口的 URL。'
+    default: 'https://api.anthropic.com/v1'
+  anthropic_light_model:
     required: false
     description:
       '用于简单任务的模型，如总结文件差异。'
-    default: 'gpt-4o'
-  openai_heavy_model:
+    default: 'claude-3-7-sonnet-latest'
+  anthropic_heavy_model:
     required: false
     description: '用于复杂任务的模型，如代码审查。'
-    default: 'gpt-4o'
+    default: 'claude-3-7-sonnet-latest'
   openai_model_temperature:
     required: false
     description: '模型的温度参数'
@@ -231,5 +231,5 @@ inputs:
     description: '机器人的图标'
     default: '<img src="https://avatars.githubusercontent.com/in/347564?s=41" alt="Image description" width="20" height="20">'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
