@@ -1,23 +1,23 @@
-import {info, warning} from '@actions/core'
+import { info, warning } from '@actions/core'
 // eslint-disable-next-line camelcase
-import {context as github_context} from '@actions/github'
-import {type Bot} from './bot'
+import { context as github_context } from '@actions/github'
+import { type Bot } from './bot'
 import {
   Commenter,
   COMMENT_REPLY_TAG,
   COMMENT_TAG,
   SUMMARIZE_TAG
 } from './commenter'
-import {Inputs} from './inputs'
-import {octokit} from './octokit'
-import {type Options} from './options'
-import {type Prompts} from './prompts'
-import {getTokenCount} from './tokenizer'
+import { Inputs } from './inputs'
+import { octokit } from './octokit'
+import { type Options } from './options'
+import { type Prompts } from './prompts'
+import { getTokenCount } from './tokenizer'
 
 // eslint-disable-next-line camelcase
 const context = github_context
 const repo = context.repo
-const ASK_BOT = '@coderabbitai'
+const ASK_BOT = '@aigne'
 
 export const handleReviewComment = async (
   heavyBot: Bot,
@@ -75,7 +75,7 @@ export const handleReviewComment = async (
     inputs.diff = comment.diff_hunk
     inputs.filename = comment.path
 
-    const {chain: commentChain, topLevelComment} =
+    const { chain: commentChain, topLevelComment } =
       await commenter.getCommentChain(pullNumber, comment)
 
     if (!topLevelComment) {
