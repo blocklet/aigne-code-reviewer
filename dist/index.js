@@ -6501,7 +6501,7 @@ IMPORTANT: Entire response must be in the language with ISO code: ${this.options
 // eslint-disable-next-line camelcase
 const context = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
 const repo = context.repo;
-const COMMENT_GREETING = `${(0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('bot_icon')}   CodeRabbit`;
+const COMMENT_GREETING = `${(0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('bot_icon')} AIGNE`;
 const COMMENT_TAG = '<!-- This is an auto-generated comment by AIGNE Reviewer -->';
 const COMMENT_REPLY_TAG = '<!-- This is an auto-generated reply by AIGNE Reviewer -->';
 const SUMMARIZE_TAG = '<!-- This is an auto-generated comment: summarize by AIGNE Reviewer -->';
@@ -10257,7 +10257,7 @@ ${filename}: ${summary}
             (0,core.info)('release notes: nothing obtained from openai');
         }
         else {
-            let message = '### Summary by CodeRabbit\n\n';
+            let message = '### Summary by AIGNE\n\n';
             message += releaseNotesResponse;
             try {
                 await commenter.updateDescription(context.payload.pull_request.number, message);
