@@ -17,6 +17,9 @@ importers:
       '@aigne/core':
         specifier: ^1.3.1
         version: 1.3.1(@anthropic-ai/sdk@0.39.0)(@google/generative-ai@0.24.0)(@types/node@20.17.24)(openai@4.89.0(zod@3.24.2))
+      '@anthropic-ai/sdk':
+        specifier: ^0.39.0
+        version: 0.39.0
       '@dqbd/tiktoken':
         specifier: ^1.0.7
         version: 1.0.20

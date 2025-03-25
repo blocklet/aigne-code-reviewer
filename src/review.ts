@@ -538,6 +538,7 @@ ${
         if (tokens + patchTokens <= options.heavyTokenLimits.requestTokens) {
           selectedPatches.push([startLine, endLine, patch])
           tokens += patchTokens
+          // eslint-disable-next-line no-unused-vars
           patchesToPack += 1
         }
       }
