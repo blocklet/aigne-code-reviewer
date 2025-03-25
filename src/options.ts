@@ -1,6 +1,6 @@
-import {info} from '@actions/core'
-import {minimatch} from 'minimatch'
-import {TokenLimits} from './limits'
+import { info } from '@actions/core'
+import { minimatch } from 'minimatch'
+import { TokenLimits } from './limits'
 
 export class Options {
   debug: boolean

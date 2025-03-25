@@ -1,8 +1,8 @@
-import {error, info, warning} from '@actions/core'
+import { error, info, warning } from '@actions/core'
 // eslint-disable-next-line camelcase
-import {context as github_context} from '@actions/github'
+import { context as github_context } from '@actions/github'
 import pLimit from 'p-limit'
-import {type Bot} from './bot'
+import { type Bot } from './bot'
 import {
   Commenter,
   RAW_SUMMARY_END_TAG,
@@ -11,11 +11,11 @@ import {
   SHORT_SUMMARY_START_TAG,
   SUMMARIZE_TAG
 } from './commenter'
-import {Inputs} from './inputs'
-import {octokit} from './octokit'
-import {type Options} from './options'
-import {type Prompts} from './prompts'
-import {getTokenCount} from './tokenizer'
+import { Inputs } from './inputs'
+import { octokit } from './octokit'
+import { type Options } from './options'
+import { type Prompts } from './prompts'
+import { getTokenCount } from './tokenizer'
 
 // eslint-disable-next-line camelcase
 const context = github_context
@@ -526,14 +526,14 @@ ${
       // 按照重要性对 patches 进行排序
       const patchesWithImportance = patches
         .map(([startLine, endLine, patch]) => {
-          const {importance} = evaluatePatchImportance(patch)
-          return {startLine, endLine, patch, importance}
+          const { importance } = evaluatePatchImportance(patch)
+          return { startLine, endLine, patch, importance }
         })
         .sort((a, b) => b.importance - a.importance) // 按重要性降序排序
 
       // 尽可能多地打包重要的 patches
       const selectedPatches: Array<[number, number, string]> = []
-      for (const {startLine, endLine, patch} of patchesWithImportance) {
+      for (const { startLine, endLine, patch } of patchesWithImportance) {
         const patchTokens = getTokenCount(patch)
         if (tokens + patchTokens <= options.heavyTokenLimits.requestTokens) {
           selectedPatches.push([startLine, endLine, patch])
@@ -796,8 +796,8 @@ const splitPatch = (patch: string | null | undefined): string[] => {
 const patchStartEndLine = (
   patch: string
 ): {
-  oldHunk: {startLine: number; endLine: number}
-  newHunk: {startLine: number; endLine: number}
+  oldHunk: { startLine: number; endLine: number }
+  newHunk: { startLine: number; endLine: number }
 } | null => {
   const pattern = /(^@@ -(\d+),(\d+) \+(\d+),(\d+) @@)/gm
   const match = pattern.exec(patch)
@@ -823,7 +823,7 @@ const patchStartEndLine = (
 
 const parsePatch = (
   patch: string
-): {oldHunk: string; newHunk: string} | null => {
+): { oldHunk: string; newHunk: string } | null => {
   const hunkInfo = patchStartEndLine(patch)
   if (hunkInfo == null) {
     return null
@@ -1048,7 +1048,7 @@ function evaluatePatchImportance(patch: string): {
   if (lines.length < 3) {
     importance = 0.2
     reason = '代码块很小（少于3行）'
-    return {importance, reason}
+    return { importance, reason }
   }
 
   // 检查是否包含关键字，提高重要性
@@ -1144,7 +1144,7 @@ function evaluatePatchImportance(patch: string): {
     reason = `包含复杂逻辑 (复杂度: ${complexityCount})`
   }
 
-  return {importance, reason}
+  return { importance, reason }
 }
 
 // 合并相邻的小代码块
