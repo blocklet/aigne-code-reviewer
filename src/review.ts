@@ -738,7 +738,7 @@ ${
 <details>
 <summary>提示</summary>
 
-### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> CodeRabbit 机器人 (\`@aigne\`) 聊天
+### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> AIGNE Reviewer (\`@aigne\`) 聊天
 - 回复此机器人留下的审查评论以提出后续问题。审查评论是对差异或文件的评论。
 - 通过在回复中标记 \`@aigne\` 邀请机器人加入审查评论链。
 

@@ -151,11 +151,11 @@ inputs:
     required: false
     description:
       '用于简单任务的模型，如总结文件差异。'
-    default: 'claude-3-7-sonnet-latest'
+    default: 'claude-3-7-sonnet-20250219'
   anthropic_heavy_model:
     required: false
     description: '用于复杂任务的模型，如代码审查。'
-    default: 'claude-3-7-sonnet-latest'
+    default: 'claude-3-7-sonnet-20250219'
   openai_model_temperature:
     required: false
     description: '模型的温度参数'
