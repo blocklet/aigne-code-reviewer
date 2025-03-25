@@ -1,7 +1,7 @@
-import {getInput, info, warning} from '@actions/core'
+import { getInput, info, warning } from '@actions/core'
 // eslint-disable-next-line camelcase
-import {context as github_context} from '@actions/github'
-import {octokit} from './octokit'
+import { context as github_context } from '@actions/github'
+import { octokit } from './octokit'
 
 // eslint-disable-next-line camelcase
 const context = github_context
@@ -10,37 +10,37 @@ const repo = context.repo
 export const COMMENT_GREETING = `${getInput('bot_icon')}   CodeRabbit`
 
 export const COMMENT_TAG =
-  '<!-- This is an auto-generated comment by OSS CodeRabbit -->'
+  '<!-- This is an auto-generated comment by AIGNE Reviewer -->'
 
 export const COMMENT_REPLY_TAG =
-  '<!-- This is an auto-generated reply by OSS CodeRabbit -->'
+  '<!-- This is an auto-generated reply by AIGNE Reviewer -->'
 
 export const SUMMARIZE_TAG =
-  '<!-- This is an auto-generated comment: summarize by OSS CodeRabbit -->'
+  '<!-- This is an auto-generated comment: summarize by AIGNE Reviewer -->'
 
 export const IN_PROGRESS_START_TAG =
-  '<!-- This is an auto-generated comment: summarize review in progress by OSS CodeRabbit -->'
+  '<!-- This is an auto-generated comment: summarize review in progress by AIGNE Reviewer -->'
 
 export const IN_PROGRESS_END_TAG =
-  '<!-- end of auto-generated comment: summarize review in progress by OSS CodeRabbit -->'
+  '<!-- end of auto-generated comment: summarize review in progress by AIGNE Reviewer -->'
 
 export const DESCRIPTION_START_TAG =
-  '<!-- This is an auto-generated comment: release notes by OSS CodeRabbit -->'
+  '<!-- This is an auto-generated comment: release notes by AIGNE Reviewer -->'
 export const DESCRIPTION_END_TAG =
-  '<!-- end of auto-generated comment: release notes by OSS CodeRabbit -->'
+  '<!-- end of auto-generated comment: release notes by AIGNE Reviewer -->'
 
-export const RAW_SUMMARY_START_TAG = `<!-- This is an auto-generated comment: raw summary by OSS CodeRabbit -->
+export const RAW_SUMMARY_START_TAG = `<!-- This is an auto-generated comment: raw summary by AIGNE Reviewer -->
 <!--
 `
 export const RAW_SUMMARY_END_TAG = `-->
-<!-- end of auto-generated comment: raw summary by OSS CodeRabbit -->`
+<!-- end of auto-generated comment: raw summary by AIGNE Reviewer -->`
 
-export const SHORT_SUMMARY_START_TAG = `<!-- This is an auto-generated comment: short summary by OSS CodeRabbit -->
+export const SHORT_SUMMARY_START_TAG = `<!-- This is an auto-generated comment: short summary by AIGNE Reviewer -->
 <!--
 `
 
 export const SHORT_SUMMARY_END_TAG = `-->
-<!-- end of auto-generated comment: short summary by OSS CodeRabbit -->`
+<!-- end of auto-generated comment: short summary by AIGNE Reviewer -->`
 
 export const COMMIT_ID_START_TAG = '<!-- commit_ids_reviewed_start -->'
 export const COMMIT_ID_END_TAG = '<!-- commit_ids_reviewed_end -->'
@@ -519,7 +519,7 @@ ${chain}
         reviewComments,
         topLevelComment
       )
-      return {chain, topLevelComment}
+      return { chain, topLevelComment }
     } catch (e) {
       warning(`Failed to get conversation chain: ${e}`)
       return {
@@ -558,7 +558,7 @@ ${chain}
     let page = 1
     try {
       for (;;) {
-        const {data: comments} = await octokit.pulls.listReviewComments({
+        const { data: comments } = await octokit.pulls.listReviewComments({
           owner: repo.owner,
           repo: repo.repo,
           // eslint-disable-next-line camelcase
@@ -649,7 +649,7 @@ ${chain}
     let page = 1
     try {
       for (;;) {
-        const {data: comments} = await octokit.issues.listComments({
+        const { data: comments } = await octokit.issues.listComments({
           owner: repo.owner,
           repo: repo.repo,
           // eslint-disable-next-line camelcase

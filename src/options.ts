@@ -1,6 +1,6 @@
-import {info} from '@actions/core'
-import {minimatch} from 'minimatch'
-import {TokenLimits} from './limits'
+import { info } from '@actions/core'
+import { minimatch } from 'minimatch'
+import { TokenLimits } from './limits'
 
 export class Options {
   debug: boolean
@@ -32,15 +32,15 @@ export class Options {
     reviewCommentLGTM = false,
     pathFilters: string[] | null = null,
     systemMessage = '',
-    openaiLightModel = 'qwq-32b-preview',
-    openaiHeavyModel = 'qwq-32b-preview',
+    openaiLightModel = 'claude-3-7-sonnet-20250219',
+    openaiHeavyModel = 'claude-3-7-sonnet-20250219',
     openaiModelTemperature = '0.0',
     openaiRetries = '3',
     openaiTimeoutMS = '120000',
     openaiConcurrencyLimit = '6',
     githubConcurrencyLimit = '6',
-    apiBaseUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1',
-    language = 'zh-CN'
+    apiBaseUrl = 'https://api.anthropic.com/v1',
+    language = 'en-US'
   ) {
     this.debug = debug
     this.disableReview = disableReview
@@ -138,7 +138,7 @@ export class PathFilter {
   }
 }
 
-export class OpenAIOptions {
+export class ModelOptions {
   model: string
   tokenLimits: TokenLimits
 

@@ -1,28 +1,27 @@
-import {error, info, warning} from '@actions/core'
+import { error, info, warning } from '@actions/core'
 // eslint-disable-next-line camelcase
-import {context as github_context} from '@actions/github'
+import { context as github_context } from '@actions/github'
 import pLimit from 'p-limit'
-import {type Bot} from './bot'
+import { type Bot } from './bot'
 import {
   Commenter,
-  COMMENT_REPLY_TAG,
   RAW_SUMMARY_END_TAG,
   RAW_SUMMARY_START_TAG,
   SHORT_SUMMARY_END_TAG,
   SHORT_SUMMARY_START_TAG,
   SUMMARIZE_TAG
 } from './commenter'
-import {Inputs} from './inputs'
-import {octokit} from './octokit'
-import {type Options} from './options'
-import {type Prompts} from './prompts'
-import {getTokenCount} from './tokenizer'
+import { Inputs } from './inputs'
+import { octokit } from './octokit'
+import { type Options } from './options'
+import { type Prompts } from './prompts'
+import { getTokenCount } from './tokenizer'
 
 // eslint-disable-next-line camelcase
 const context = github_context
 const repo = context.repo
 
-const ignoreKeyword = '@coderabbitai: ignore'
+const ignoreKeyword = '@aigne: ignore'
 
 export const codeReview = async (
   lightBot: Bot,
@@ -512,7 +511,7 @@ ${
     const reviewsFailed: string[] = []
     let lgtmCount = 0
     let reviewCount = 0
-    
+
     // 处理大型 diff 的辅助函数
     const processLargeDiff = async (
       filename: string,
@@ -523,12 +522,14 @@ ${
       // 计算 tokens
       let tokens = getTokenCount(prompts.renderReviewFileDiff(ins))
       let patchesToPack = 0
-      
+
       // 按照重要性对 patches 进行排序
-      const patchesWithImportance = patches.map(([startLine, endLine, patch]) => {
-        const { importance } = evaluatePatchImportance(patch)
-        return { startLine, endLine, patch, importance }
-      }).sort((a, b) => b.importance - a.importance)  // 按重要性降序排序
+      const patchesWithImportance = patches
+        .map(([startLine, endLine, patch]) => {
+          const { importance } = evaluatePatchImportance(patch)
+          return { startLine, endLine, patch, importance }
+        })
+        .sort((a, b) => b.importance - a.importance) // 按重要性降序排序
 
       // 尽可能多地打包重要的 patches
       const selectedPatches: Array<[number, number, string]> = []
@@ -537,6 +538,7 @@ ${
         if (tokens + patchTokens <= options.heavyTokenLimits.requestTokens) {
           selectedPatches.push([startLine, endLine, patch])
           tokens += patchTokens
+          // eslint-disable-next-line no-unused-vars
           patchesToPack += 1
         }
       }
@@ -598,7 +600,7 @@ ${
         reviewsFailed.push(`${filename} (${e as string})`)
       }
     }
-    
+
     const doReview = async (
       filename: string,
       fileContent: string,
@@ -611,7 +613,7 @@ ${
 
       // 获取整个文件的 diff
       const fullFileDiff = patches
-        .sort((a, b) => a[0] - b[0])  // 按照开始行号排序
+        .sort((a, b) => a[0] - b[0]) // 按照开始行号排序
         .map(([, , patch]) => patch)
         .join('\n---patch_separator---\n')
 
@@ -621,7 +623,9 @@ ${
       const totalTokens = baseTokens + diffTokens
 
       if (totalTokens > options.heavyTokenLimits.requestTokens) {
-        info(`File diff too large (${totalTokens} tokens), splitting into smaller chunks`)
+        info(
+          `File diff too large (${totalTokens} tokens), splitting into smaller chunks`
+        )
         // 如果整个文件的 diff 太大，回退到分块处理方式
         await processLargeDiff(filename, fileContent, patches, ins)
         return
@@ -735,16 +739,16 @@ ${
 <details>
 <summary>提示</summary>
 
-### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> CodeRabbit 机器人 (\`@coderabbitai\`) 聊天
+### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> AIGNE Reviewer (\`@aigne\`) 聊天
 - 回复此机器人留下的审查评论以提出后续问题。审查评论是对差异或文件的评论。
-- 通过在回复中标记 \`@coderabbitai\` 邀请机器人加入审查评论链。
+- 通过在回复中标记 \`@aigne\` 邀请机器人加入审查评论链。
 
 ### 代码建议
 - 机器人可能会提出代码建议，但在提交前请仔细审查它们，因为行号范围可能会不对齐。
 - 你可以编辑机器人做出的评论，并在建议稍有偏差时手动调整。
 
 ### 暂停增量审查
-- 在 PR 描述中的任何位置添加 \`@coderabbitai: ignore\` 以暂停机器人的进一步审查。
+- 在 PR 描述中的任何位置添加 \`@aigne: ignore\` 以暂停机器人的进一步审查。
 
 </details>
 `
@@ -793,8 +797,8 @@ const splitPatch = (patch: string | null | undefined): string[] => {
 const patchStartEndLine = (
   patch: string
 ): {
-  oldHunk: {startLine: number; endLine: number}
-  newHunk: {startLine: number; endLine: number}
+  oldHunk: { startLine: number; endLine: number }
+  newHunk: { startLine: number; endLine: number }
 } | null => {
   const pattern = /(^@@ -(\d+),(\d+) \+(\d+),(\d+) @@)/gm
   const match = pattern.exec(patch)
@@ -820,7 +824,7 @@ const patchStartEndLine = (
 
 const parsePatch = (
   patch: string
-): {oldHunk: string; newHunk: string} | null => {
+): { oldHunk: string; newHunk: string } | null => {
   const hunkInfo = patchStartEndLine(patch)
   if (hunkInfo == null) {
     return null
@@ -1032,9 +1036,10 @@ ${review.comment}`
 }
 
 // 添加一个函数来评估代码块的重要性
-function evaluatePatchImportance(
-  patch: string
-): { importance: number; reason: string } {
+function evaluatePatchImportance(patch: string): {
+  importance: number
+  reason: string
+} {
   // 默认重要性为中等
   let importance = 0.5
   let reason = '默认中等重要性'
@@ -1049,29 +1054,54 @@ function evaluatePatchImportance(
 
   // 检查是否包含关键字，提高重要性
   const keywordsHigh = [
-    'function', 'class', 'interface', 'export', 'import', 
-    'constructor', 'async', 'await', 'try', 'catch', 
-    'if', 'else', 'switch', 'case', 'for', 'while', 'do',
-    'return', 'throw', 'new', 'delete', 'typeof', 'instanceof'
+    'function',
+    'class',
+    'interface',
+    'export',
+    'import',
+    'constructor',
+    'async',
+    'await',
+    'try',
+    'catch',
+    'if',
+    'else',
+    'switch',
+    'case',
+    'for',
+    'while',
+    'do',
+    'return',
+    'throw',
+    'new',
+    'delete',
+    'typeof',
+    'instanceof'
   ]
-  
+
   // 检查是否只是简单的修改，降低重要性
   const keywordsLow = [
-    'console.log', 'TODO', 'FIXME', 'NOTE', 
-    'eslint-disable', '// ', '/* ', ' */'
+    'console.log',
+    'TODO',
+    'FIXME',
+    'NOTE',
+    'eslint-disable',
+    '// ',
+    '/* ',
+    ' */'
   ]
 
   // 计算关键字出现的次数
   let highKeywordCount = 0
   let lowKeywordCount = 0
-  
+
   for (const line of lines) {
     for (const keyword of keywordsHigh) {
       if (line.includes(keyword)) {
         highKeywordCount++
       }
     }
-    
+
     for (const keyword of keywordsLow) {
       if (line.includes(keyword)) {
         lowKeywordCount++
@@ -1089,9 +1119,19 @@ function evaluatePatchImportance(
   }
 
   // 检查是否包含复杂逻辑
-  const complexityIndicators = ['{', '}', 'if', 'else', 'for', 'while', 'switch', 'try', 'catch']
+  const complexityIndicators = [
+    '{',
+    '}',
+    'if',
+    'else',
+    'for',
+    'while',
+    'switch',
+    'try',
+    'catch'
+  ]
   let complexityCount = 0
-  
+
   for (const line of lines) {
     for (const indicator of complexityIndicators) {
       if (line.includes(indicator)) {
@@ -1099,7 +1139,7 @@ function evaluatePatchImportance(
       }
     }
   }
-  
+
   if (complexityCount > 3) {
     importance = Math.max(importance, 0.7)
     reason = `包含复杂逻辑 (复杂度: ${complexityCount})`
@@ -1126,12 +1166,16 @@ function mergePatchesIfNeeded(
       continue
     }
 
-    const [currentStartLine, currentEndLine, currentPatchStr] = currentPatch as [number, number, string]
+    const [currentStartLine, currentEndLine, currentPatchStr] =
+      currentPatch as [number, number, string]
     const [nextStartLine, nextEndLine, nextPatchStr] = patch
 
     // 如果两个代码块相距不远且合并后不会太大，则合并它们
-    if (nextStartLine - currentEndLine < 10 && 
-        currentPatchStr.split('\n').length + nextPatchStr.split('\n').length < maxPatchSize) {
+    if (
+      nextStartLine - currentEndLine < 10 &&
+      currentPatchStr.split('\n').length + nextPatchStr.split('\n').length <
+        maxPatchSize
+    ) {
       // 合并两个代码块
       currentPatch = [
         currentStartLine,
