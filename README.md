@@ -1,18 +1,11 @@
-# CodeRabbit Pro
-
-This is an old version of [CodeRabbit](http://coderabbit.ai) and is now in the maintenance mode.
-We recommend installing the Pro version from [CodeRabbit](http://coderabbit.ai). The Pro version is a total redesign and offers significantly better reviews that learn from your usage and improve over time. CodeRabbit Pro is free for open source projects.
-
-[![Discord](https://img.shields.io/badge/Join%20us%20on-Discord-blue?logo=discord&style=flat-square)](https://discord.gg/GsXnASn26c)
-
-# AI-based PR reviewer and summarizer
+# AIGNE-based PR reviewer and summarizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/github/last-commit/blocklet/ai-pr-reviewer/main?style=flat-square)](https://github.com/blocklet/ai-pr-reviewer/commits/main)
+[![GitHub](https://img.shields.io/github/last-commit/blocklet/aigne-code-reviewer/main?style=flat-square)](https://github.com/blocklet/aigne-code-reviewer/commits/main)
 
 ## Overview
 
-CodeRabbit `ai-pr-reviewer` is an AI-based code reviewer and summarizer for
+CodeRabbit `aigne-code-reviewer` is an AI-based code reviewer and summarizer for
 GitHub pull requests using OpenAI's `gpt-3.5-turbo` and `gpt-4` models. It is
 designed to be used as a GitHub Action and can be configured to run on every
 pull request and review comments
@@ -49,8 +42,7 @@ configure the required environment variables, such as `GITHUB_TOKEN` and
 `OPENAI_API_KEY`. For more information on usage, examples, contributing, and
 FAQs, you can refer to the sections below.
 
-- [CodeRabbit Pro](#coderabbit-pro)
-- [AI-based PR reviewer and summarizer](#ai-based-pr-reviewer-and-summarizer)
+- [AIGNE-based PR reviewer and summarizer](#aigne-based-pr-reviewer-and-summarizer)
   - [Overview](#overview)
   - [Reviewer Features:](#reviewer-features)
   - [Install instructions](#install-instructions)
@@ -70,8 +62,8 @@ FAQs, you can refer to the sections below.
 
 ## Install instructions
 
-`ai-pr-reviewer` runs as a GitHub Action. Add the below file to your repository
-at `.github/workflows/ai-pr-reviewer.yml`
+`aigne-code-reviewer` runs as a GitHub Action. Add the below file to your repository
+at `.github/workflows/aigne-code-reviewer.yml`
 
 ```yaml
 name: Code Review
@@ -96,7 +88,7 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: blocklet/ai-pr-reviewer@latest
+      - uses: blocklet/aigne-code-reviewer@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -139,7 +131,7 @@ value. For example, to review docs/blog posts, you can use the following prompt:
 
 ```yaml
 system_message: |
-  You are `@coderabbitai` (aka `github-actions[bot]`), a language model
+  You are `@aigne` (aka `github-actions[bot]`), a language model
   trained by OpenAI. Your purpose is to act as a highly experienced
   DevRel (developer relations) professional with focus on cloud-native
   infrastructure.
@@ -170,11 +162,11 @@ system_message: |
 
 You can reply to a review comment made by this action and get a response based
 on the diff context. Additionally, you can invite the bot to a conversation by
-tagging it in the comment (`@coderabbitai`).
+tagging it in the comment (`@aigne`).
 
 Example:
 
-> @coderabbitai Please generate a test plan for this file.
+> @aigne Please generate a test plan for this file.
 
 Note: A review comment is a comment made on a diff or a file in the pull
 request.
@@ -186,12 +178,12 @@ to review documentation, you can ignore PRs that only change the documentation.
 To ignore a PR, add the following keyword in the PR description:
 
 ```text
-@coderabbitai: ignore
+@aigne: ignore
 ```
 
 ## Examples
 
-Some of the reviews done by ai-pr-reviewer
+Some of the reviews done by aigne-code-reviewer
 
 ![PR Summary](./docs/images/PRSummary.png)
 
@@ -256,7 +248,7 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: blocklet/ai-pr-reviewer@latest
+      - uses: blocklet/aigne-code-reviewer@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

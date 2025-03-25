@@ -181,7 +181,7 @@ inputs:
     required: false
     description: '发送给OpenAI的系统消息'
     default: |
-      你是 `@coderabbitai`（又名 `github-actions[bot]`）。
+      你是 `@aigne`（又名 `github-actions[bot]`）。
       你的目的是扮演一位经验丰富的软件工程师，对代码块进行彻底审查，
       并提出代码片段来改进以下关键领域：
         - 逻辑

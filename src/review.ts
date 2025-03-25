@@ -22,7 +22,7 @@ import {getTokenCount} from './tokenizer'
 const context = github_context
 const repo = context.repo
 
-const ignoreKeyword = '@coderabbitai: ignore'
+const ignoreKeyword = '@aigne: ignore'
 
 export const codeReview = async (
   lightBot: Bot,
@@ -512,7 +512,7 @@ ${
     const reviewsFailed: string[] = []
     let lgtmCount = 0
     let reviewCount = 0
-    
+
     // 处理大型 diff 的辅助函数
     const processLargeDiff = async (
       filename: string,
@@ -523,7 +523,7 @@ ${
       // 计算 tokens
       let tokens = getTokenCount(prompts.renderReviewFileDiff(ins))
       let patchesToPack = 0
-      
+
       // 按照重要性对 patches 进行排序
       const patchesWithImportance = patches.map(([startLine, endLine, patch]) => {
         const { importance } = evaluatePatchImportance(patch)
@@ -598,7 +598,7 @@ ${
         reviewsFailed.push(`${filename} (${e as string})`)
       }
     }
-    
+
     const doReview = async (
       filename: string,
       fileContent: string,
@@ -735,16 +735,16 @@ ${
 <details>
 <summary>提示</summary>
 
-### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> CodeRabbit 机器人 (\`@coderabbitai\`) 聊天
+### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> CodeRabbit 机器人 (\`@aigne\`) 聊天
 - 回复此机器人留下的审查评论以提出后续问题。审查评论是对差异或文件的评论。
-- 通过在回复中标记 \`@coderabbitai\` 邀请机器人加入审查评论链。
+- 通过在回复中标记 \`@aigne\` 邀请机器人加入审查评论链。
 
 ### 代码建议
 - 机器人可能会提出代码建议，但在提交前请仔细审查它们，因为行号范围可能会不对齐。
 - 你可以编辑机器人做出的评论，并在建议稍有偏差时手动调整。
 
 ### 暂停增量审查
-- 在 PR 描述中的任何位置添加 \`@coderabbitai: ignore\` 以暂停机器人的进一步审查。
+- 在 PR 描述中的任何位置添加 \`@aigne: ignore\` 以暂停机器人的进一步审查。
 
 </details>
 `
@@ -1049,29 +1049,29 @@ function evaluatePatchImportance(
 
   // 检查是否包含关键字，提高重要性
   const keywordsHigh = [
-    'function', 'class', 'interface', 'export', 'import', 
-    'constructor', 'async', 'await', 'try', 'catch', 
+    'function', 'class', 'interface', 'export', 'import',
+    'constructor', 'async', 'await', 'try', 'catch',
     'if', 'else', 'switch', 'case', 'for', 'while', 'do',
     'return', 'throw', 'new', 'delete', 'typeof', 'instanceof'
   ]
-  
+
   // 检查是否只是简单的修改，降低重要性
   const keywordsLow = [
-    'console.log', 'TODO', 'FIXME', 'NOTE', 
+    'console.log', 'TODO', 'FIXME', 'NOTE',
     'eslint-disable', '// ', '/* ', ' */'
   ]
 
   // 计算关键字出现的次数
   let highKeywordCount = 0
   let lowKeywordCount = 0
-  
+
   for (const line of lines) {
     for (const keyword of keywordsHigh) {
       if (line.includes(keyword)) {
         highKeywordCount++
       }
     }
-    
+
     for (const keyword of keywordsLow) {
       if (line.includes(keyword)) {
         lowKeywordCount++
@@ -1091,7 +1091,7 @@ function evaluatePatchImportance(
   // 检查是否包含复杂逻辑
   const complexityIndicators = ['{', '}', 'if', 'else', 'for', 'while', 'switch', 'try', 'catch']
   let complexityCount = 0
-  
+
   for (const line of lines) {
     for (const indicator of complexityIndicators) {
       if (line.includes(indicator)) {
@@ -1099,7 +1099,7 @@ function evaluatePatchImportance(
       }
     }
   }
-  
+
   if (complexityCount > 3) {
     importance = Math.max(importance, 0.7)
     reason = `包含复杂逻辑 (复杂度: ${complexityCount})`
@@ -1130,7 +1130,7 @@ function mergePatchesIfNeeded(
     const [nextStartLine, nextEndLine, nextPatchStr] = patch
 
     // 如果两个代码块相距不远且合并后不会太大，则合并它们
-    if (nextStartLine - currentEndLine < 10 && 
+    if (nextStartLine - currentEndLine < 10 &&
         currentPatchStr.split('\n').length + nextPatchStr.split('\n').length < maxPatchSize) {
       // 合并两个代码块
       currentPatch = [
