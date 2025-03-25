@@ -6382,6 +6382,7 @@ class Bot {
     constructor(options, modelOptions) {
         this.options = options;
         this.modelOptions = modelOptions;
+        (0,core.info)(`Anthropic API key: ${!!process.env.ANTHROPIC_API_KEY}`);
         if (process.env.ANTHROPIC_API_KEY) {
             this.api = new sdk({
                 apiKey: process.env.ANTHROPIC_API_KEY
@@ -9241,7 +9242,7 @@ class Options {
     heavyTokenLimits;
     apiBaseUrl;
     language;
-    constructor(debug, disableReview, disableReleaseNotes, maxFiles = '0', reviewSimpleChanges = false, reviewCommentLGTM = false, pathFilters = null, systemMessage = '', openaiLightModel = 'qwq-32b-preview', openaiHeavyModel = 'qwq-32b-preview', openaiModelTemperature = '0.0', openaiRetries = '3', openaiTimeoutMS = '120000', openaiConcurrencyLimit = '6', githubConcurrencyLimit = '6', apiBaseUrl = 'https://dashscope.aliyuncs.com/compatible-mode/v1', language = 'zh-CN') {
+    constructor(debug, disableReview, disableReleaseNotes, maxFiles = '0', reviewSimpleChanges = false, reviewCommentLGTM = false, pathFilters = null, systemMessage = '', openaiLightModel = 'claude-3-7-sonnet-20250219', openaiHeavyModel = 'claude-3-7-sonnet-20250219', openaiModelTemperature = '0.0', openaiRetries = '3', openaiTimeoutMS = '120000', openaiConcurrencyLimit = '6', githubConcurrencyLimit = '6', apiBaseUrl = 'https://api.anthropic.com/v1', language = 'en-US') {
         this.debug = debug;
         this.disableReview = disableReview;
         this.disableReleaseNotes = disableReleaseNotes;

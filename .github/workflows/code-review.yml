@@ -35,6 +35,8 @@ jobs:
           debug: true
           language: 'en-US'
           review_comment_lgtm: false
+          openai_light_model: claude-3-7-sonnet-20250219
+          openai_heavy_model: claude-3-7-sonnet-20250219
           path_filters: |
             !dist/**
             !**/*.lock

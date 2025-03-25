@@ -19,6 +19,7 @@ export class Bot {
   constructor(options: Options, modelOptions: ModelOptions) {
     this.options = options
     this.modelOptions = modelOptions
+    info(`Anthropic API key: ${!!process.env.ANTHROPIC_API_KEY}`)
     if (process.env.ANTHROPIC_API_KEY) {
       this.api = new Anthropic({
         apiKey: process.env.ANTHROPIC_API_KEY
