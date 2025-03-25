@@ -143,7 +143,7 @@ inputs:
     required: false
     description: '禁用发布说明'
     default: 'false'
-  anthropic_base_url:
+  openai_base_url:
     required: false
     description: '兼容 Anthropic API 接口的 URL。'
     default: 'https://api.anthropic.com/v1'
