@@ -3,7 +3,8 @@ import {
   getInput,
   getMultilineInput,
   setFailed,
-  warning
+  warning,
+  debug
 } from '@actions/core'
 import { Bot } from './bot'
 import { ModelOptions, Options } from './options'
@@ -74,10 +75,12 @@ async function run(): Promise<void> {
       process.env.GITHUB_EVENT_NAME === 'pull_request' ||
       process.env.GITHUB_EVENT_NAME === 'pull_request_target'
     ) {
+      options.debug && debug(`Running code review`)
       await codeReview(lightBot, heavyBot, options, prompts)
     } else if (
       process.env.GITHUB_EVENT_NAME === 'pull_request_review_comment'
     ) {
+      options.debug && debug(`Running review comment`)
       await handleReviewComment(heavyBot, options, prompts)
     } else {
       warning('Skipped: this action only works on push events or pull_request')
