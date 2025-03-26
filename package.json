@@ -12,7 +12,7 @@
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
     "test": "jest",
-    "all": "rm -rf dist && mkdir dist && npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "rm -f dist/*.js && npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
     "type": "git",
