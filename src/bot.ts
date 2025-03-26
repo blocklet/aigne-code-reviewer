@@ -17,18 +17,20 @@ export class Bot {
   private readonly modelOptions: ModelOptions
 
   constructor(options: Options, modelOptions: ModelOptions) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error(
+        "'ANTHROPIC_API_KEY' environment variable is not available"
+      )
+    }
+
+    info(`ANTHROPIC_API_KEY: is available`)
+
     this.options = options
     this.modelOptions = modelOptions
-    if (process.env.ANTHROPIC_API_KEY) {
-      this.api = new ClaudeChatModel({
-        apiKey: process.env.ANTHROPIC_API_KEY,
-        model: this.modelOptions.model
-      })
-    } else {
-      const err =
-        "Unable to initialize the Anthropic API, 'ANTHROPIC_API_KEY' environment variable is not available"
-      throw new Error(err)
-    }
+    this.api = new ClaudeChatModel({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+      model: this.modelOptions.model
+    })
   }
 
   chat = async (message: string, ids: Ids): Promise<[string, Ids]> => {
@@ -59,12 +61,11 @@ export class Bot {
       const currentDate = new Date().toISOString().split('T')[0]
       const reviewAgent = AIAgent.from({
         name: 'Code Reviewer',
+        outputKey: 'review',
         instructions: `${this.options.systemMessage}
 Knowledge cutoff: ${this.modelOptions.tokenLimits.knowledgeCutOff}
 Current date: ${currentDate}
-
-IMPORTANT: Entire response must be in the language with ISO code: ${this.options.language}
-`
+IMPORTANT: Entire response must be in the language with ISO code: ${this.options.language}`
       })
       const engine = new ExecutionEngine({ model: this.api })
 
@@ -88,7 +89,7 @@ IMPORTANT: Entire response must be in the language with ISO code: ${this.options
           }
         )
         info(`result: ${JSON.stringify(result)}`)
-        response = ''
+        response = result.review as string
       } catch (e: unknown) {
         info(
           `response: ${response}, failed to send message to anthropic: ${e}, backtrace: ${
