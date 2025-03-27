@@ -199,8 +199,8 @@ export const codeReview = async (
           }
         } catch (e: any) {
           warning(
-            `Failed to get file contents: ${
-              e as string
+            `Failed to get file contents: ${e as string} for ${
+              file.filename
             }. This is OK if it's a new file.`
           )
         }

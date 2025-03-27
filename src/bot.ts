@@ -24,13 +24,14 @@ export class Bot {
       )
     }
 
-    info(`ANTHROPIC_API_KEY: is available`)
-
     this.options = options
     this.modelOptions = modelOptions
     this.api = new ClaudeChatModel({
       apiKey: process.env.ANTHROPIC_API_KEY,
-      model: this.modelOptions.model
+      model: this.modelOptions.model,
+      modelOptions: {
+        temperature: this.options.openaiModelTemperature
+      }
     })
   }
 
@@ -71,24 +72,9 @@ IMPORTANT: Entire response must be in the language with ISO code: ${this.options
       const engine = new ExecutionEngine({ model: this.api })
 
       try {
-        const result = await pRetry(
-          () =>
-            engine.call(reviewAgent, {
-              messages: [
-                {
-                  role: 'user',
-                  content: message
-                }
-              ],
-              modelOptions: {
-                model: this.modelOptions.model,
-                temperature: this.options.openaiModelTemperature
-              }
-            }),
-          {
-            retries: this.options.openaiRetries
-          }
-        )
+        const result = await pRetry(() => engine.call(reviewAgent, message), {
+          retries: this.options.openaiRetries
+        })
         info(`result: ${JSON.stringify(result)}`)
         response = result.review as string
       } catch (e: unknown) {
