@@ -21,7 +21,7 @@ import { getTokenCount } from './tokenizer'
 const context = github_context
 const repo = context.repo
 
-const ignoreKeyword = '@aigne: ignore'
+const ignoreKeyword = '@aignebot: ignore'
 
 export const codeReview = async (
   lightBot: Bot,
@@ -739,16 +739,16 @@ ${
 <details>
 <summary>提示</summary>
 
-### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> AIGNE Reviewer (\`@aigne\`) 聊天
+### 与 <img src="https://avatars.githubusercontent.com/in/347564?s=41&u=fad245b8b4c7254fe63dd4dcd4d662ace122757e&v=4" alt="Image description" width="20" height="20"> AIGNE Reviewer (\`@aignebot\`) 聊天
 - 回复此机器人留下的审查评论以提出后续问题。审查评论是对差异或文件的评论。
-- 通过在回复中标记 \`@aigne\` 邀请机器人加入审查评论链。
+- 通过在回复中标记 \`@aignebot\` 邀请机器人加入审查评论链。
 
 ### 代码建议
 - 机器人可能会提出代码建议，但在提交前请仔细审查它们，因为行号范围可能会不对齐。
 - 你可以编辑机器人做出的评论，并在建议稍有偏差时手动调整。
 
 ### 暂停增量审查
-- 在 PR 描述中的任何位置添加 \`@aigne: ignore\` 以暂停机器人的进一步审查。
+- 在 PR 描述中的任何位置添加 \`@aignebot: ignore\` 以暂停机器人的进一步审查。
 
 </details>
 `
