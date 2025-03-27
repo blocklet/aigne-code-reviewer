@@ -1,7 +1,8 @@
 import './fetch-polyfill'
 
 import { info, setFailed, warning } from '@actions/core'
-import { AIAgent, ClaudeChatModel, ExecutionEngine } from '@aigne/core'
+import { AIAgent, ExecutionEngine } from '@aigne/core'
+import { ClaudeChatModel } from '@aigne/core/models/claude-chat-model.js'
 import pRetry from 'p-retry'
 import { ModelOptions, Options } from './options'
 

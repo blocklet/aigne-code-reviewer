@@ -27,7 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.1.1",
-    "@aigne/core": "^1.4.0",
+    "@aigne/core": "^1.5.0",
     "@dqbd/tiktoken": "^1.0.7",
     "@octokit/action": "^6.0.4",
     "@octokit/plugin-retry": "^4.1.3",
@@ -57,9 +57,7 @@
     "ts-jest": "^27.1.2",
     "typescript": "^4.9.5"
   },
-  "pnpm": {
-    "patchedDependencies": {
-      "@modelcontextprotocol/sdk@1.7.0": "patches/@modelcontextprotocol__sdk@1.7.0.patch"
-    }
+  "resolutions": {
+    "pkce-challenge": "https://github.com/AIGNE-io/pkce-challenge#dist"
   }
 }
