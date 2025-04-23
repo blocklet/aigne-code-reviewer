@@ -21,8 +21,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@anthropic-ai/sdk@0.39.0)(@google/generative-ai@0.24.0)(@types/node@20.17.24)(openai@4.89.0(zod@3.24.2))
       '@dqbd/tiktoken':
-        specifier: ^1.0.7
-        version: 1.0.20
+        specifier: ^1.0.21
+        version: 1.0.21
       '@octokit/action':
         specifier: ^6.0.4
         version: 6.1.0
@@ -297,8 +297,8 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@dqbd/tiktoken@1.0.20':
-    resolution: {integrity: sha512-WsLzNYO1uzYOvIXunvwRcQObD4UsebirRnGzOuZc/x4oJ+0haEjdNxeeCfFaQami+Bai3u06QTt0/FWyYRsIhw==}
+  '@dqbd/tiktoken@1.0.21':
+    resolution: {integrity: sha512-grBxRSY9+/iBM205EWjbMm5ySeXQrhJyXWMP38VJd+pO2DRGraDAbi4n8J8T9M4XY1M/FHgonMcmu3J+KjcX0Q==}
 
   '@eslint-community/eslint-utils@4.5.1':
     resolution: {integrity: sha512-soEIOALTfTK6EjmKMMoLugwaP0rzkad90iIWd1hMO9ARkSAyjfMfkRRhLvD5qH7vvM0Cg72pieUfR6yh6XxC4w==}
@@ -764,11 +764,14 @@ packages:
   '@types/node-fetch@2.6.12':
     resolution: {integrity: sha512-8nneRWKCg3rMtF69nLQJnOYUcbafYeFSjqkw3jCRLsqkWFlHaoQrr5mXmofFGOx3DKn7UfmBMyov8ySvLRVldA==}
 
-  '@types/node@18.19.83':
-    resolution: {integrity: sha512-D69JeR5SfFS5H6FLbUaS0vE4r1dGhmMBbG4Ed6BNS4wkDK8GZjsdCShT5LCN59vOHEUHnFCY9J4aclXlIphMkA==}
+  '@types/node@18.19.86':
+    resolution: {integrity: sha512-fifKayi175wLyKyc5qUfyENhQ1dCNI1UNjp653d8kuYcPQN5JhX3dGuP/XmvPTg/xRBn1VTLpbmi+H/Mr7tLfQ==}
 
   '@types/node@20.17.24':
     resolution: {integrity: sha512-d7fGCyB96w9BnWQrOsJtpyiSaBcAYYr75bnK6ZRjDbql2cGLj/3GsL5OYmLPNq76l7Gf2q4Rv9J2o6h5CrD9sA==}
+
+  '@types/node@20.17.30':
+    resolution: {integrity: sha512-7zf4YyHA+jvBNfVrk2Gtvs6x7E8V+YDW05bNfG2XkWDJfYRXrTiP/DsB2zSYTaHX0bGIujTBQdMVAhb+j7mwpg==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2622,6 +2625,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -3604,7 +3608,7 @@ snapshots:
 
   '@anthropic-ai/sdk@0.39.0':
     dependencies:
-      '@types/node': 18.19.83
+      '@types/node': 18.19.86
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -3801,7 +3805,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@dqbd/tiktoken@1.0.20': {}
+  '@dqbd/tiktoken@1.0.21': {}
 
   '@eslint-community/eslint-utils@4.5.1(eslint@8.57.1)':
     dependencies:
@@ -4456,14 +4460,18 @@ snapshots:
 
   '@types/node-fetch@2.6.12':
     dependencies:
-      '@types/node': 20.17.24
+      '@types/node': 20.17.30
       form-data: 4.0.2
 
-  '@types/node@18.19.83':
+  '@types/node@18.19.86':
     dependencies:
       undici-types: 5.26.5
 
   '@types/node@20.17.24':
+    dependencies:
+      undici-types: 6.19.8
+
+  '@types/node@20.17.30':
     dependencies:
       undici-types: 6.19.8
 
@@ -6900,7 +6908,7 @@ snapshots:
 
   openai@4.89.0(zod@3.24.2):
     dependencies:
-      '@types/node': 18.19.83
+      '@types/node': 18.19.86
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
